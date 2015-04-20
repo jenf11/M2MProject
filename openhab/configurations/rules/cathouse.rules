@@ -1,0 +1,93 @@
+import org.openhab.core.library.types.*
+import org.openhab.core.persistence.*
+import org.openhab.model.script.actions.*
+
+var Number counter = 1
+var Timer timer = null
+
+rule "Temp change"
+	when 
+		Item TempC received update
+	then 
+		if(TempC.state >= 30){
+			//sendCommand(mySwitch, OFF)
+			logInfo("TempC---: ", TempC.state.toString())
+			//Oherror.sendCommand("omg we are going to die")//send alert
+			TempAlert.postUpdate("alert: the temperature is too high.")//send alert
+			
+			logInfo("TempAlert---", TempAlert.state.toString())
+		}
+		else{
+			
+			//Oherror.sendCommand("all good")//send alert
+			TempAlert.postUpdate("all good")//send alert
+			logInfo("TempAlert" , TempAlert.state.toString())
+		}
+	
+end
+
+rule "Humid change"
+	when 
+		Item Humid received update
+	then 
+		if(Humid.state > 60){
+			//sendCommand(mySwitch, OFF)
+			logInfo("Humid: ", Humid.state.toString())
+			HumidAlert.postUpdate("alert: The humidity is too high")//send alert
+			logInfo("HumidAlert", HumidAlert.state.toString())
+		}
+		else{
+			
+			HumidAlert.postUpdate("all good")//send alert
+			logInfo("HumidAlert" , HumidAlert.state.toString())
+		}
+	
+end
+
+/**
+ * This is a demo rule which simulates a real dimmer by reacting to increase/decrease commands 
+ * and posting an updated state on the bus 
+ */
+rule "Dimmed Light"
+	when
+		Item DimmedLight received command
+	then
+		var Number percent = 0
+		if(DimmedLight.state instanceof DecimalType) percent = DimmedLight.state as DecimalType 
+			
+		if(receivedCommand==INCREASE) percent = percent + 5
+		if(receivedCommand==DECREASE) percent = percent - 5
+
+		if(percent<0)   percent = 0
+		if(percent>100) percent = 100
+		postUpdate(DimmedLight, percent);
+end
+
+rule "Motion Detected"
+when
+	Item MotionD received update
+then
+	if(MotionD.state ==0){
+		MotionMsg.postUpdate("")
+	}
+	else{
+		MotionMsg.postUpdate("Motion detected")
+	}
+end
+
+
+rule "Select Panda Lighting"
+	when
+		Item Panda received update 
+	then
+		logInfo("Panda: ", Panda.state.toString())
+		if(Panda.state>= 5){
+			//sendCommand(Light_PF_Table, OFF)
+			PandaERR.postUpdate("Too many pandas")
+		} 
+		else{
+			PandaERR.postUpdate( "error")
+		}
+end
+
+

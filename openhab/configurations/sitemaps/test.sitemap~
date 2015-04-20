@@ -1,0 +1,6 @@
+sitemap test label="Main Menu"
+{
+	Frame label="Temperature" {
+		Text item=TempC
+	}
+}

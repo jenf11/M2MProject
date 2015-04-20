@@ -1,0 +1,1 @@
+Number TEST "Current temperature inside [%d °C]" {mqtt="<[mybroker:sensor1/TempC:state:default]"}

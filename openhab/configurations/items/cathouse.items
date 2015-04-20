@@ -1,0 +1,54 @@
+Group CH_All
+Group CH_gPF 		(CH_All)
+Group CH_Weather 	(CH_All)
+Group CH_Status 	(CH_All)
+Group chart2        (CH_All)
+
+
+/* active groups */
+Group:Switch:OR(ON, OFF) 		Lights 		"All Lights [(%d)]" 								(CH_All)
+Group:Switch:OR(ON, OFF) 		Heating 	"No. of Active Heatings [(%d)]" 	<heating> 		(CH_All)
+Group:Number:AVG 				Temperature	"Avg. Room Temperature [%.1f °C]" 	<temperature>	(Status)
+Group:Contact:OR(OPEN, CLOSED) 	Windows 	"Open windows [(%d)]"				<contact>		(CH_All)
+
+/* Lights */
+
+Switch Light_PF_Table 		"Table" 		(CH_gPF, Lights)
+
+
+/* Windows */
+
+Group Weather_Chart													(CH_Weather)
+Number Weather_Temperature 		"Outside Temperature [%.1f °C]"	<temperature> (Weather_Chart) { http="<[http://weather.yahooapis.com/forecastrss?w=638242&u=c:60000:XSLT(yahoo_weather_temperature.xsl)]" }
+Number Weather_Humidity 		"Outside Humidity [%.1f %%]"	<temperature> (CH_Weather) { http="<[http://weather.yahooapis.com/forecastrss?w=638242&u=c:60000:XSLT(yahoo_weather_humidity.xsl)]" }
+Number Weather_Humidex			"Humidex [SCALE(humidex.scale):%s]" 			(CH_Weather)
+Number Weather_Temp_Max 		"Todays Maximum [%.1f °C]"	<temperature> (Weather_Chart)
+Number Weather_Temp_Min 		"Todays Minimum [%.1f °C]"	<temperature> (Weather_Chart)
+Number Weather_Chart_Period		"Chart Period"
+DateTime Weather_LastUpdate		"Last Update [%1$ta %1$tR]"	<clock>
+
+/* NTP binding demo item */
+DateTime		Date			"Date [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	{ ntp="Europe/Berlin:de_DE" }
+
+/*Sensor data */
+Number Panda "How many pandas[ :%d]"{mqtt="<[mybroker:panda/count:state:default]"}
+Number TempC "Current temperature inside [%.1f °C]" <temperature> {mqtt="<[mybroker:+/TempC:state:default]"}
+Number Humid "Current inside Humidity [%.1f ]" {mqtt="<[mybroker:+/Humid:state:default]"}
+Number DewPoint "Dew Point is at [%.1f ]" {mqtt="<[mybroker:+/Dewpoint:state:default]"}
+Number MotionD "Motion Detection" {mqtt="<[mybroker:+/Motion:state:default]"}
+Number Altitude "Altitude is [%.1f ]" {mqtt="<[mybroker:+/Height:state:default]"}
+Number Pressure "Pressure is [%.1f ]" {mqtt="<[mybroker:+/Pressure:state:default]"}
+
+Number TempChart "Current temperature inside [%.1f]" (chart2){mqtt="<[mybroker:+/TempC:state:default]"}
+Number HumidChart "Current inside Humidity [%.1f ]" (chart2){mqtt="<[mybroker:+/Humid:state:default]"}
+Number PressureChart "Current inside Pressure [%.1f]" (chart2){mqtt="<[mybroker:+/Pressure:state:default]"}
+/*Errors */
+String PandaERR "There was a problem [: %s]" (CH_gPF)
+
+String TempAlert {mqtt=">[mybroker:/myhouse/Temp/alert:state:*:${itemName} ${state}]"} 
+String HumidAlert {mqtt=">[mybroker:/myhouse/Humid/alert:state:*:${itemName} ${state}]"} 
+//Item itemName {mqtt="<direction>[<broker>:<topic>:<type>:<trigger>:<transformation>]" }
+Switch mySwitch// {mqtt=">[localhost:/myhouse/temp/alert:command:ON:1],>[localhost:/myhouse/temp/alert:command:OFF:0]"}
+
+String MotionMsg "[%s]" (CH_All)
+
