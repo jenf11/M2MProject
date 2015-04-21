@@ -52,3 +52,16 @@ Switch mySwitch// {mqtt=">[localhost:/myhouse/temp/alert:command:ON:1],>[localho
 
 String MotionMsg "[%s]" (CH_All)
 
+//Activites 
+Number GoalStep "Goal step [%d]" {mqtt="<[mybroker:bracelet/goalStep:state:default]"}
+String Steps "Steps finish [%s]" {mqtt="<[mybroker:bracelet/move/steps:state:default]"}
+Number Calories "Calories consume [%.1f]" {mqtt="<[mybroker:bracelet/move/calories:state:default]"}
+Number Distance "Distance walked [%d]" {mqtt="<[mybroker:bracelet/move/distance:state:default]"}
+
+
+//sleeps
+String SleepTime "Total sleeping time [ %s]" {mqtt="<[mybroker:bracelet/sleep/sleepTime:state:default]"}
+Number AwakeTimes "Awake times [%d]" {mqtt="<[mybroker:bracelet/sleep/awakeTimes:state:default]"}
+Number SleepQuality "Sleep quality [%d]" {mqtt="<[mybroker:bracelet/sleep/sleepQuality:state:default]"}
+
+

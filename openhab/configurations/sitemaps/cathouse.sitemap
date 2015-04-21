@@ -1,8 +1,16 @@
 sitemap cathouse label="Main Menu"
 {
-	Frame {
-		Group item=CH_gPF label="Panda Testing Room" icon="firstfloor"
-		}
+	Frame label="Activites" {
+		Text item=GoalStep
+		Text item=Steps
+		Text item=Distance
+		Text item=Calories
+	}
+	Frame label="Sleeps" {
+		Text item=SleepTime
+		Text item=AwakeTimes
+		Text item=SleepQuality
+	}
 	Frame label="Motion"{
 		Text item=MotionD
 		Text item=MotionMsg
