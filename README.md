@@ -1,5 +1,6 @@
 # M2MProject
 Repo to hold files for the IOT m2m project
+http://air.imag.fr/index.php/PM2M/2015/TP
 
 Tech used 
 Galileo
